@@ -1,0 +1,16 @@
+.gradient-text {
+    background: linear-gradient(270deg, #40ffaa, #4079ff, #40ffaa, #4079ff ,#40d2ff);
+    background-size: 800% 800%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: animatedGradient 8s ease infinite;
+    font-size: 32px;
+    font-weight: bold;
+  }
+  
+  @keyframes animatedGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  

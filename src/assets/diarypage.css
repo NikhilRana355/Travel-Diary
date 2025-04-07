@@ -1,0 +1,153 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.form{
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+/* Form Container */
+.form-container {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 100%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ff9800;
+    text-align: center;
+}
+
+/* Profile Photo Section */
+.profile-photo-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+/* Styling for uploaded images */
+.image-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.uploaded-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Travel Images */
+.travel-img-large {
+    width: 100%;
+    max-width: 600px; /* Adjust for larger images */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+}
+
+.profile-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 2px solid #ff9800;
+    position: relative;
+}
+
+.profile-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Edit Icon */
+.edit-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-icon i {
+    font-size: 14px;
+}
+
+/* Hide File Input */
+#profile-photo, #travel-photos {
+    display: none;
+}
+
+/* Form Fields */
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+    text-align: left;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Submit Button */
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.submit-btn:hover {
+    background-color: #e68900;
+}
+
+/* Travel Photos Upload Preview */
+.photo-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.photo-preview img {
+    width: 120px;  /* Fixed small square size */
+    height: 120px;
+    object-fit: cover; /* Prevent stretching */
+    border-radius: 10px;
+    border: 2px solid #ff9800;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}

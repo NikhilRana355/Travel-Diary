@@ -1,0 +1,106 @@
+/* Post container - center and align posts properly */
+.post-container {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+
+/* Wrapper for each post to control width */
+.post-wrapper {
+  width: 40%;
+  max-width: 600px;
+}
+
+/* Additional space at the top */
+.extra-space {
+  height: 20px;
+}
+
+/* Individual Post Card */
+.post-card {
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+/* Post Header - User info and date */
+.post-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Profile Picture */
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+/* User info - name and date */
+.user-info h5 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.user-info small {
+  color: gray;
+}
+
+/* Post Image */
+.post-img {
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+/* Post Body */
+.post-body {
+  margin-top: 10px;
+}
+
+.post-body h5 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.post-body p {
+  margin: 5px 0;
+  color: #555;
+}
+
+/* Post Footer - Like, Comment, Share */
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Action Buttons - Like, Comment, Share */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.btn-action {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-action:hover {
+  color: #007bff;
+}
+
+/* Post Timestamp */
+.post-time {
+  color: gray;
+  font-size: 12px;
+}

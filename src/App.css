@@ -1,0 +1,89 @@
+/* App.css */
+
+/* Forgot Password Container */
+.forgot-password-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+
+/* post.css */
+
+.post-container {
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+.post-item {
+  position: relative;
+  width: 100%;
+  height: 250px; /* Fixed height */
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures all images fit the same box */
+  transition: transform 0.3s ease;
+}
+
+.post-item:hover .post-image {
+  transform: scale(1.05);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+}
+
+.modal-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover; /* Uniform scaling for modal images */
+  border-radius: 5px;
+}
+
+
