@@ -180,7 +180,7 @@ const handleFollow = async (userIdToFollow) => {
           filteredUsers.map((user) => (
             <div key={user._id} className="d-flex justify-content-between align-items-center border-bottom py-2">
               <div className="d-flex align-items-center">
-                <img src={user.profilePicture || defaultAvatar} alt="Profile" className="rounded-circle me-2" style={{ width: '40px', height: '40px' }} />
+                <img src={user.profilePic || defaultAvatar} alt="Profile" className="rounded-circle me-2" style={{ width: '40px', height: '40px' }} />
                 <div>
                   <h6 className="mb-0">{user.fullName}</h6>
                   <small className="text-muted">@{user.userName}</small>

@@ -5,16 +5,16 @@ import { Slide, toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
 import defaultAvatar from "../assets/imges/default.png";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { MyPost } from "./MyPost";
+import { MyPost } from "../user/MyPost"
+ 
 
 export const Profile = () => {
   const [user, setUser] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [originalUsername, setOriginalUsername] = useState("");
   const [stats, setStats] = useState({ posts: 0, followers: 0, following: 0 });
-  const [posts, setPosts] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [posts, setPosts] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [showFollowers, setShowFollowers] = useState(false);
@@ -31,8 +31,8 @@ export const Profile = () => {
     try {
       const response = await axios.get(`http://localhost:3022/user/${userId}`);
       setUser(response.data.data);
-      setPreviewImage(response.data.data.profilePicture);
       setOriginalUsername(response.data.data.userName);
+      setPreviewImage(null); // Reset preview to force use of actual saved picture
     } catch (error) {
       console.error("Error fetching user profile", error);
       toast.error("Error fetching profile.");
@@ -42,9 +42,16 @@ export const Profile = () => {
   const fetchUserStats = async () => {
     try {
       if (!userId) return;
-      const response = await axios.get(`http://localhost:3022/user/stats/${userId}`);
-      if (response.status === 200) {
-        setStats(response.data);
+      const postsRes = await axios.get(`/diary/getdiarybyuserid/${userId}`);
+      const postCount = postsRes.data.data.length;
+
+      const statsRes = await axios.get(`http://localhost:3022/user/stats/${userId}`);
+      if (statsRes.status === 200) {
+        setStats({
+          posts: postCount,
+          followers: statsRes.data.followers,
+          following: statsRes.data.following
+        });
       }
     } catch (error) {
       console.error("Error fetching user stats:", error);
@@ -55,17 +62,10 @@ export const Profile = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setSelectedImage(file);
-    setPreviewImage(URL.createObjectURL(file)); // Show preview immediately
-
-    if (!userId) {
-      console.error("User ID is missing!");
-      toast.error("User ID is required to upload the profile picture.");
-      return;
-    }
+    setPreviewImage(URL.createObjectURL(file));
 
     const formData = new FormData();
-    formData.append("profilePicture", file);
+    formData.append("image", file);
 
     try {
       const response = await axios.put(
@@ -73,16 +73,12 @@ export const Profile = () => {
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
-          onUploadProgress: (progressEvent) => {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            console.log(`Upload Progress: ${percentCompleted}%`);
-          }
         }
       );
 
       if (response.data.profilePicture) {
-        setUser((prev) => ({ ...prev, profilePicture: response.data.profilePicture }));
         toast.success("Profile picture updated successfully!");
+        await fetchUserProfile();
       } else {
         throw new Error("Invalid response from server.");
       }
@@ -91,31 +87,6 @@ export const Profile = () => {
       toast.error(error?.response?.data?.error || "Error uploading image. Please try again.");
     }
   };
-
-  const uploadImageToCloudinary = async (file) => {
-    setLoading(true);
-    const formData = new FormData();
-    formData.append("profilePicture", file); // Ensure key matches backend
-
-    try {
-      const response = await axios.put(`http://localhost:3022/user/${userId}/uploadProfilePic`, formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
-
-      if (response.data.profilePicture) {
-        setUser((prev) => ({ ...prev, profilePicture: response.data.profilePicture })); // Update UI
-        toast.success("Profile picture updated successfully!");
-      } else {
-        throw new Error("Invalid response from server");
-      }
-    } catch (error) {
-      console.error("Upload failed:", error.response?.data || error.message);
-      toast.error(error.response?.data?.error || "Error uploading image.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
 
   const handleInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -179,13 +150,11 @@ export const Profile = () => {
         followerId: userId,
         followingId: userIdToUnfollow,
       });
-  
+
       if (response.status === 200) {
         toast.success("Unfollowed successfully!");
-  
-        // Update the following list after unfollowing
-        setFollowing((prevFollowing) =>
-          prevFollowing.filter((user) => user._id !== userIdToUnfollow)
+        setFollowing((prev) =>
+          prev.filter((user) => user._id !== userIdToUnfollow)
         );
       }
     } catch (error) {
@@ -193,7 +162,7 @@ export const Profile = () => {
       toast.error("Failed to unfollow. Please try again.");
     }
   };
-  
+
   const renderUserList = (list, title, onClose, showUnfollow) => (
     <div
       className="position-fixed bg-white shadow border p-3"
@@ -206,13 +175,11 @@ export const Profile = () => {
         overflowY: "auto",
       }}
     >
-      {/* Header */}
       <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
         <h5 className="mb-0">{title}</h5>
         <button className="btn btn-sm w-25" onClick={onClose}>✖</button>
       </div>
-  
-      {/* List */}
+
       {list.length === 0 ? (
         <p className="text-muted text-center mt-3">No {title.toLowerCase()} yet.</p>
       ) : (
@@ -221,18 +188,16 @@ export const Profile = () => {
             key={user._id}
             className="d-flex align-items-center justify-content-between py-2 border-bottom"
           >
-            {/* User Info */}
             <div className="d-flex align-items-center">
               <img
-                src={user.profilePicture || defaultAvatar}
+                src={ previewImage || user.profilePic || defaultAvatar}
                 alt="avatar"
                 className="rounded-circle me-2"
                 style={{ width: "40px", height: "40px", objectFit: "cover" }}
               />
               <span className="fw-medium">{user.fullName}</span>
             </div>
-  
-            {/* Unfollow Button (Only in Following List) */}
+
             {showUnfollow && (
               <button className="btn btn-outline-danger btn-sm w-25" onClick={() => handleUnfollow(user._id)}>
                 Unfollow
@@ -243,8 +208,6 @@ export const Profile = () => {
       )}
     </div>
   );
-  
-    
 
   return (
     <>
@@ -267,11 +230,7 @@ export const Profile = () => {
             <h5>{user.fullName}</h5>
             <p className="text-muted">@{user.userName}</p>
           </div>
-          {/* <div className="d-flex justify-content-center gap-4 mt-3">
-            <span><strong>{stats.posts}</strong> Posts</span>
-            <span><strong>{stats.followers}</strong> Followers</span>
-            <span><strong>{stats.following}</strong> Following</span>
-          </div> */}
+
           <button className="btn btn-outline-primary w-auto btn-sm mt-2 px-2 py-1" style={{ fontSize: "15px" }} onClick={() => setIsEditing(true)}>
             ✏️ Edit
           </button>
@@ -296,6 +255,7 @@ export const Profile = () => {
             </div>
           )}
         </div>
+
         <div className="d-flex justify-content-center gap-4 mt-3">
           <span><strong>{stats.posts}</strong> Posts</span>
           <span style={{ cursor: "pointer" }} onClick={() => { fetchFollowers(); setShowFollowers(!showFollowers); }}>
@@ -306,13 +266,8 @@ export const Profile = () => {
           </span>
         </div>
 
-        {/* {showFollowers && renderUserList(followers, "Followers")}
-        {showFollowing && renderUserList(following, "Following")} */}
-
         {showFollowers && renderUserList(followers, "Followers", () => setShowFollowers(false), false)}
         {showFollowing && renderUserList(following, "Following", () => setShowFollowing(false), true)}
-
-
 
         <MyPost posts={posts} />
       </div>

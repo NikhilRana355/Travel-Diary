@@ -14,18 +14,18 @@ export const Notification = ({ userId }) => {
   const [error, setError] = useState(null);
   const [followersIds, setFollowersIds] = useState([]);
 
-
   useEffect(() => {
     if (!effectiveUserId) return;
     fetchNotifications();
     fetchFollowing();
     fetchFollowers();
+    markNotificationsAsRead();
   }, [effectiveUserId]);
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get(`http://localhost:3022/notifications/${effectiveUserId}`);
-      setNotifications(res.data);
+      const res = await axios.get(`/notifications/${effectiveUserId}`);
+      setNotifications(res.data.notifications || []);
     } catch (err) {
       console.error("Error fetching notifications:", err);
       setError("Failed to load notifications.");
@@ -34,9 +34,18 @@ export const Notification = ({ userId }) => {
     }
   };
 
+  const markNotificationsAsRead = async () => {
+    try {
+      await axios.post(`/notifications/mark-read/${effectiveUserId}`);
+      localStorage.setItem("notificationsRead", "true");
+    } catch (err) {
+      console.error("Failed to mark notifications as read", err);
+    }
+  };
+
   const fetchFollowing = async () => {
     try {
-      const res = await axios.get(`http://localhost:3022/user/following/${effectiveUserId}`);
+      const res = await axios.get(`/user/following/${effectiveUserId}`);
       setFollowingIds(res.data.following.map((user) => user._id));
     } catch (err) {
       console.error("Error fetching following list:", err);
@@ -45,14 +54,13 @@ export const Notification = ({ userId }) => {
 
   const fetchFollowers = async () => {
     try {
-      const res = await axios.get(`http://localhost:3022/user/followers/${effectiveUserId}`);
+      const res = await axios.get(`/user/followers/${effectiveUserId}`);
       setFollowersIds(res.data.followers.map((user) => user._id));
     } catch (err) {
       console.error("Error fetching followers list:", err);
     }
   };
   
-
   const handleToggleSelect = (id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((nid) => nid !== id) : [...prev, id]
@@ -61,7 +69,7 @@ export const Notification = ({ userId }) => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete("http://localhost:3022/notifications/delete", {
+      await axios.delete("/notifications/delete", {
         data: { notificationIds: selectedIds },
       });
       setNotifications((prev) => prev.filter((n) => !selectedIds.includes(n._id)));
@@ -150,7 +158,7 @@ export const Notification = ({ userId }) => {
       )}
 
       <div className="list-group">
-        {notifications.map((n, index) => {
+        {Array.isArray(notifications) && notifications.map((n, index) => {
           const prev = notifications[index - 1];
           const showLine = isNewSender(n, prev);
           const senderId = n.sender?._id;

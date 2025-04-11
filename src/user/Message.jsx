@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import defaultAvatar from "../assets/imges/default.png";
+import { io } from "socket.io-client"; // ✅ Socket.io client
 
 export const Message = () => {
   const { receiverId } = useParams();
@@ -11,7 +12,36 @@ export const Message = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
 
-  // Fetch users you follow
+  const [incomingMessage, setIncomingMessage] = useState(null);
+  const [unreadCounts, setUnreadCounts] = useState({});
+  const socket = io("http://localhost:3022");
+
+  // ✅ Listen for incoming messages
+  useEffect(() => {
+    socket.on("receiveMessage", (data) => {
+      setIncomingMessage(data);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  // ✅ Append incoming message if sender is selected
+  useEffect(() => {
+    if (incomingMessage) {
+      if (incomingMessage.sender === selectedUserId) {
+        setMessages((prev) => [...prev, incomingMessage]);
+      } else {
+        setUnreadCounts((prev) => ({
+          ...prev,
+          [incomingMessage.sender]: (prev[incomingMessage.sender] || 0) + 1,
+        }));
+      }
+    }
+  }, [incomingMessage, selectedUserId]);
+
+  // ✅ Fetch users you follow
   useEffect(() => {
     const fetchFollowing = async () => {
       try {
@@ -24,13 +54,40 @@ export const Message = () => {
     fetchFollowing();
   }, [currentUserId]);
 
-  // Fetch messages when a user is selected
+  // ✅ Fetch unread counts
+  useEffect(() => {
+    const fetchUnreadCounts = async () => {
+      try {
+        const res = await axios.get(`/message/unread/${currentUserId}`);
+        setUnreadCounts(res.data);
+      } catch (err) {
+        console.error("Failed to fetch unread counts");
+      }
+    };
+
+    if (currentUserId) fetchUnreadCounts();
+  }, [currentUserId]);
+
+  // ✅ Fetch messages when a user is selected
   useEffect(() => {
     const fetchMessages = async () => {
       if (!selectedUserId) return;
       try {
         const res = await axios.get(`/message/message/${currentUserId}/${selectedUserId}`);
         setMessages(res.data);
+
+        // ✅ Mark messages as read
+        await axios.post("/message/read", {
+          senderId: selectedUserId,
+          receiverId: currentUserId,
+        });
+
+        // ✅ Clear unread count
+        setUnreadCounts((prev) => {
+          const updated = { ...prev };
+          delete updated[selectedUserId];
+          return updated;
+        });
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
@@ -38,6 +95,7 @@ export const Message = () => {
     fetchMessages();
   }, [selectedUserId, currentUserId]);
 
+  // ✅ Send a message
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
 
@@ -47,7 +105,9 @@ export const Message = () => {
         receiverId: selectedUserId,
         content: newMessage,
       });
-      setMessages((prev) => [...prev, res.data]);
+      const sentMessage = res.data;
+      setMessages((prev) => [...prev, sentMessage]);
+      socket.emit("sendMessage", sentMessage);
       setNewMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
@@ -65,30 +125,66 @@ export const Message = () => {
               key={user._id}
               className={`d-flex align-items-center p-2 cursor-pointer ${selectedUserId === user._id ? "bg-light" : ""
                 }`}
-              onClick={() => setSelectedUserId(user._id)}
+              onClick={async () => {
+                setSelectedUserId(user._id);
+                await axios.post("/message/read", {
+                  senderId: user._id,
+                  receiverId: currentUserId,
+                });
+                setUnreadCounts((prev) => {
+                  const updated = { ...prev };
+                  delete updated[user._id];
+                  return updated;
+                });
+              }}
               style={{ cursor: "pointer" }}
             >
               <img
-                src={user.profilePicture || defaultAvatar}
+                src={user.profilePic || defaultAvatar}
                 alt="profile"
                 className="rounded-circle me-2"
                 style={{ width: "40px", height: "40px" }}
               />
               <div>
-                <div>{user.fullName}</div>
+                <strong
+                  style={{
+                    fontWeight: unreadCounts[user._id] ? "bold" : "normal",
+                  }}
+                >
+                  {user.fullName}
+                </strong>
+                <br />
                 <small className="text-muted">@{user.userName}</small>
               </div>
+              {unreadCounts[user._id] && (
+                <span className="badge bg-danger ms-auto">{unreadCounts[user._id]}</span>
+              )}
             </div>
           ))}
         </div>
 
         {/* Right side - Messages */}
         <div className="col-md-8 d-flex flex-column justify-content-between">
-          <div className="border-bottom p-3 bg-light">
-            <strong>
-              {followingUsers.find((u) => u._id === selectedUserId)?.fullName || "Select a chat"}
-            </strong>
+          <div className="border-bottom p-3 bg-light d-flex align-items-center">
+            {selectedUserId && (
+              <>
+                <img
+                  src={
+                    followingUsers.find((u) => u._id === selectedUserId)?.profilePic ||
+                    defaultAvatar
+                  }
+                  alt="profile"
+                  className="rounded-circle me-2"
+                  style={{ width: "40px", height: "40px" }}
+                />
+                <strong>
+                  {followingUsers.find((u) => u._id === selectedUserId)?.fullName}
+                </strong>
+              </>
+            )}
+            {!selectedUserId && <strong>Select a chat</strong>}
           </div>
+
           <div className="flex-grow-1 overflow-auto p-3">
             {messages.length > 0 ? (
               messages.map((msg, i) => (
@@ -142,8 +238,6 @@ export const Message = () => {
               ></i>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
