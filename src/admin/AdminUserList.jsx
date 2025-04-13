@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2'; // ✅ SweetAlert2 import
 
 const BACKEND_URL = "http://localhost:3022";
 
@@ -35,15 +36,38 @@ export const AdminUserList = () => {
     };
 
     const deleteDiary = async (diaryId) => {
-        try {
-            await axios.delete(`${BACKEND_URL}/diary/${diaryId}`);
-            setStats(prevStats => ({
-                ...prevStats,
-                diariesList: prevStats.diariesList.filter(diary => diary._id !== diaryId),
-            }));
-        } catch (err) {
-            console.error("Error deleting diary:", err.message);
-        }
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#e74c3c',
+            cancelButtonColor: '#aaa',
+            confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.delete(`${BACKEND_URL}/diary/${diaryId}`);
+                    setStats(prevStats => ({
+                        ...prevStats,
+                        diariesList: prevStats.diariesList.filter(diary => diary._id !== diaryId),
+                    }));
+
+                    Swal.fire(
+                        'Deleted!',
+                        'The diary has been deleted.',
+                        'success'
+                    );
+                } catch (err) {
+                    console.error("Error deleting diary:", err.message);
+                    Swal.fire(
+                        'Error!',
+                        'Something went wrong while deleting.',
+                        'error'
+                    );
+                }
+            }
+        });
     };
 
     return (
@@ -79,7 +103,6 @@ export const AdminUserList = () => {
                                 <h5>{user.fullName}</h5>
                                 <p>@{user.userName}</p>
 
-                                {/* Display post images here */}
                                 <div style={{ marginTop: "1rem", display: "flex", gap: "0.5rem" }}>
                                     {user.posts?.slice(0, 3).map((post) => (
                                         <img
@@ -123,8 +146,6 @@ export const AdminUserList = () => {
                             fontSize: "24px",
                             border: "none",
                             cursor: "pointer",
-                            // lineHeight: "1",
-                            // padding: "0",
                         }}
                         title="Close"
                     >
@@ -146,10 +167,9 @@ export const AdminUserList = () => {
                         />
                         <h3>{selectedUser.fullName}</h3>
                         <p><strong>Username:</strong> @{selectedUser.userName}</p>
-                        <p><strong>Email:</strong> {selectedUser.email}</p>
+                        <p><strong>Email:</strong> {selectedUser.email || "Not provided"}</p>
                     </div>
 
-                    {/* Diary Table */}
                     <h4>📝 Diaries</h4>
                     {stats.diariesList.length > 0 ? (
                         <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "2rem" }}>
@@ -178,16 +198,16 @@ export const AdminUserList = () => {
                                         </td>
                                         <td>{diary.title}</td>
                                         <td>
-                                            <button 
-                                            onClick={() => console.log("View diary:" , diary)}
-                                            style={{
-                                                background: "#3498db",
-                                                color: "#fff",
-                                                border: "none",
-                                                padding: "6px 10px",
-                                                borderRadius: "4px",
-                                                width: "80px",
-                                            }}>
+                                            <button
+                                                onClick={() => console.log("View diary:", diary)}
+                                                style={{
+                                                    background: "#3498db",
+                                                    color: "#fff",
+                                                    border: "none",
+                                                    padding: "6px 10px",
+                                                    borderRadius: "4px",
+                                                    width: "80px",
+                                                }}>
                                                 View
                                             </button>
                                         </td>
@@ -218,6 +238,3 @@ export const AdminUserList = () => {
         </div>
     );
 };
-
-
-
