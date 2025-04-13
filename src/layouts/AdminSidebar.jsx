@@ -28,7 +28,7 @@ export const AdminSidebar = () => {
           data-bs-theme="light"
         >
           <div className="sidebar-brand">
-            <Link to="/user/home" className="brand-link">
+            <Link to="/admin/adminhome" className="brand-link">
               <div className="brand-text  text-uppercase">Travel Diary</div>
             </Link>
           </div>
@@ -37,15 +37,15 @@ export const AdminSidebar = () => {
             <nav className="mt-2">
               <ul className="nav sidebar-menu flex-column" role="menu">
                 <li className="nav-item">
-                  <Link to="/user" className="nav-link">
+                  <Link to="/admin/adminhome" className="nav-link">
                     <i className="nav-icon bi bi-house-door" />
                     <p>Home</p>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/user/addDiary" className="nav-link">
-                    <i class=" nav-icon bi bi-plus-circle"></i>
-                    <p>Add Diary</p>
+                  <Link to="/admin/adminuser" className="nav-link">
+                    <i class=" nav-icon bi bi-people-fill"></i>
+                    <p>Users</p>
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -77,7 +77,7 @@ export const AdminSidebar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/login" className="nav-link text-danger" onClick={handleLogout}>
+                  <Link to="/logout" className="nav-link text-danger" onClick={handleLogout}>
                     <i className="nav-icon bi bi-box-arrow-right" />
                     <p>Logout</p>
                   </Link>

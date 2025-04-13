@@ -35,15 +35,35 @@ export const Search = () => {
     };
   }, []);
 
+  // const fetchUsers = async () => {
+  //   try {
+  //     const res = await axios.get("/users");
+  //     const filtered = res.data.data.filter(user => user._id !== userId);
+  //     setUsers(filtered.sort((a, b) => a.fullName.localeCompare(b.fullName)));
+  //   } catch (error) {
+  //     console.error("Error fetching users:", error);
+  //   }
+  // };
+
+  const ADMIN_ROLE_ID = "67d0211330fc0b0b8a748d21"; // 👈 Replace with your real admin roleId
+
   const fetchUsers = async () => {
     try {
       const res = await axios.get("/users");
-      const filtered = res.data.data.filter(user => user._id !== userId);
+      const allUsers = res.data.data || [];
+  
+      // ✅ Filter out self and users with admin role ID
+      const filtered = allUsers.filter(user => 
+        user._id !== userId && user.roleId !== ADMIN_ROLE_ID
+      );
+  
       setUsers(filtered.sort((a, b) => a.fullName.localeCompare(b.fullName)));
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
+  
+  
 
   const fetchFollowing = async () => {
     try {

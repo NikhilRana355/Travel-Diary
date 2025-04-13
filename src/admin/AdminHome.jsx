@@ -12,6 +12,8 @@ import {
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
+const BACKEND_URL = "http://localhost:3022"; // 🔁 Update as needed
+
 export const AdminHome = () => {
   const [users, setUsers] = useState([]);
   const [diaries, setDiaries] = useState([]);
@@ -23,36 +25,36 @@ export const AdminHome = () => {
     const fetchAll = async () => {
       try {
         const [userRes, diaryRes, itinRes] = await Promise.all([
-          axios.get("http://localhost:3022/users"),
-          axios.get("http://localhost:3022/diary/alldiaries"),
-          axios.get("http://localhost:3022/itin/itinerary/total"),
+          axios.get(`${BACKEND_URL}/users`),
+          axios.get(`${BACKEND_URL}/diary/alldiaries`),
+          axios.get(`${BACKEND_URL}/itin/itinerary/total`),
         ]);
 
-        const userList = userRes.data.data;
-        const diaryList = diaryRes.data;
-        const itineraryTotal = itinRes.data.total;
+        const allUsers = userRes.data.data || [];
+        const activeUsers = allUsers.filter((u) => u.isActive !== false);
+        const diariesList = diaryRes.data || [];
+        const itineraryTotal = itinRes.data.total || 0;
 
-        setUsers(userList);
-        setDiaries(diaryList);
+        setUsers(activeUsers);
+        setDiaries(diariesList);
+
         setStats({
-          users: userList.length,
-          diaries: diaryList.length,
+          users: activeUsers.length,
+          diaries: diariesList.length,
           itineraries: itineraryTotal,
         });
 
-        // Count diaries per user
         const userPostCount = {};
-        diaryList.forEach((diary) => {
+        diariesList.forEach((diary) => {
           const id = diary.userId;
           if (id) userPostCount[id] = (userPostCount[id] || 0) + 1;
         });
 
-        // Top 4 users
         const top = Object.entries(userPostCount)
           .sort((a, b) => b[1] - a[1])
           .slice(0, 4)
           .map(([id, count]) => {
-            const user = userList.find((u) => u._id === id);
+            const user = activeUsers.find((u) => u._id === id);
             return user ? { ...user, count } : null;
           })
           .filter(Boolean);
@@ -77,6 +79,17 @@ export const AdminHome = () => {
     fetchAll();
   }, []);
 
+  const handleSoftDeleteUser = async (userId) => {
+    if (!window.confirm("Mark this user as inactive?")) return;
+    try {
+      await axios.put(`${BACKEND_URL}/user/soft-delete/${userId}`);
+      setUsers((prev) => prev.filter((u) => u._id !== userId));
+    } catch (err) {
+      console.error("Soft delete failed:", err.message);
+      alert("Could not deactivate user.");
+    }
+  };
+
   return (
     <div className="admin-dashboard" style={{ padding: "2rem", background: "#f4f6f9", minHeight: "100vh" }}>
       <h2 style={{ fontSize: "2rem", fontWeight: "bold" }}>📊 Admin Dashboard</h2>
@@ -92,7 +105,7 @@ export const AdminHome = () => {
       <div style={{ marginTop: "3rem" }}>
         <h4 style={{ marginBottom: "1rem" }}>All Users</h4>
         <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-          {users.slice(0, 8).map((user) => (
+          {users.map((user) => (
             <div
               key={user._id}
               style={{
@@ -104,7 +117,7 @@ export const AdminHome = () => {
               }}
             >
               <img
-                src={user.profilePic || "/default-user.png"}
+                src={user.profilePic} 
                 alt={user.fullName}
                 style={{
                   width: "60px",
@@ -117,12 +130,27 @@ export const AdminHome = () => {
               <h5>{user.fullName || "Unnamed"}</h5>
               <p style={{ fontSize: "0.85rem", color: "#666" }}>@{user.userName}</p>
               <p style={{ fontSize: "0.8rem", color: "#888" }}>{user.email}</p>
+              <button
+                onClick={() => handleSoftDeleteUser(user._id)}
+                style={{
+                  marginTop: "10px",
+                  padding: "6px 12px",
+                  background: "#e67e22",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: "0.85rem",
+                }}
+              >
+                🚫 Deactivate
+              </button>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Top Travelers Chart */}
+      {/* Chart for Top Travelers */}
       <div
         style={{
           marginTop: "3rem",
@@ -134,13 +162,15 @@ export const AdminHome = () => {
       >
         <h4 style={{ marginBottom: "1rem" }}>Top Travelers (by Diary Posts)</h4>
         {chartData ? (
+        <div style={{ width: "100%", maxWidth: "600px", margin: "0 auto" }}>  
           <Bar data={chartData} />
+        </div>
         ) : (
           <p style={{ color: "gray" }}>No data available to display chart.</p>
         )}
       </div>
 
-      {/* Top Travelers List */}
+      {/* Top Travelers */}
       <div style={{ marginTop: "2rem" }}>
         <h4>Top Travelers</h4>
         <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
@@ -166,16 +196,17 @@ export const AdminHome = () => {
       {/* Admin Quick Actions */}
       <div style={{ marginTop: "3rem" }}>
         <h4 style={{ marginBottom: "1rem" }}>Quick Actions</h4>
-        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+        {/* <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
           <button style={btnStyle}>🚫 Ban User</button>
           <button style={btnStyle}>🧹 Moderate Diaries</button>
           <button style={btnStyle}>📢 Send Announcement</button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
 };
 
+// Stat Card
 const StatCard = ({ title, value, bg, icon }) => (
   <div
     style={{
@@ -193,6 +224,7 @@ const StatCard = ({ title, value, bg, icon }) => (
   </div>
 );
 
+// Quick Action Buttons
 const btnStyle = {
   padding: "0.75rem 1.5rem",
   background: "#3498db",

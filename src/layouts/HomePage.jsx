@@ -141,7 +141,7 @@ export const HomePage = () => {
                 <p className="card-text text-muted">{post.description}</p>
                 <p className="text-muted">
                   📍 {post.cityId?.name || "City"}, {post.stateId?.name || "State"},{" "}
-                  {post.countryId?.name || "Country"}
+                  {post.country?.name || "Country"}
                 </p>
               </div>
 
@@ -214,7 +214,7 @@ export const HomePage = () => {
                 <p>{selectedPost.description}</p>
                 <p>
                   <strong>Location:</strong>{" "}
-                  {selectedPost.cityId?.name}, {selectedPost.stateId?.name}, {selectedPost.countryId?.name}
+                  {selectedPost.cityId?.name}, {selectedPost.stateId?.name}, {selectedPost.country?.name}
                 </p>
                 <p className="text-muted">
                   <strong>Posted on:</strong>{" "}
@@ -266,7 +266,7 @@ export const HomePage = () => {
                     }))
                   }
                 />
-                <button className="btn btn-primary" onClick={() => submitComment(selectedPost._id)}>
+                <button className="btn btn-primary" style={{width: "80px" }} onClick={() => submitComment(selectedPost._id)}>
                   Post
                 </button>
               </div>

@@ -25,6 +25,7 @@ import { Notification } from './common/Notification';
 import { AdminNavbar } from './layouts/AdminNavbar';
 import { AdminSidebar } from './layouts/AdminSidebar';
 import { AdminHome } from './admin/AdminHome';
+import { AdminUserList } from './admin/AdminUserList';
 
 axios.defaults.baseURL = "http://localhost:3022";
 
@@ -77,6 +78,7 @@ function App() {
           {/* <Route path='/' element={<Navigate to='/admin'/>}></Route> */} 
           <Route path='/admin' element={<AdminSidebar/>}>
               <Route  path='adminhome' index element={<AdminHome/>}></Route>
+              <Route path='adminuser' element={<AdminUserList/>}></Route>
           </Route>
 
         </Route>

@@ -72,17 +72,17 @@ export const AdminNavbar = ({ toggleSidebar }) => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/user/addDiary" className="nav-link" data-bs-toggle="tooltip" title="Add Diary">
-              <i className="nav-icon bi bi-plus-circle"></i>
+            <Link to="/admin/adminuser" className="nav-link" data-bs-toggle="tooltip" title="Users">
+              <i className="nav-icon bi bi-people-fill"></i>
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/user/itinerary" className="nav-link" data-bs-toggle="tooltip" title="Itinerary">
+            <Link to="" className="nav-link" data-bs-toggle="tooltip" title="Itinerary">
               <i className="nav-icon bi bi-check-square" />
             </Link>
           </li>
           <li className="nav-item position-relative">
-            <Link to="/user/notification" className="nav-link" data-bs-toggle="tooltip" title="Notification">
+            <Link to="" className="nav-link" data-bs-toggle="tooltip" title="Notification">
               <i className="nav-icon bi bi-bell-fill" />
               {unreadNotifications > 0 && (
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -92,7 +92,7 @@ export const AdminNavbar = ({ toggleSidebar }) => {
             </Link>
           </li>
           <li className="nav-item position-relative">
-            <Link to="/user/message" className="nav-link" data-bs-toggle="tooltip" title="Messages">
+            <Link to="" className="nav-link" data-bs-toggle="tooltip" title="Messages">
               <i className="nav-icon bi bi-chat-right-text"></i>
               {unreadCount > 0 && (
                 <span className="position-absolute top-0 start-20 ranslate-middle badge rounded-pill text-light bg-danger">
@@ -112,7 +112,7 @@ export const AdminNavbar = ({ toggleSidebar }) => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/user/profile" className="nav-link" data-bs-toggle="tooltip" title="Profile">
+            <Link to="" className="nav-link" data-bs-toggle="tooltip" title="Profile">
               <i className="nav-icon bi bi-person-circle" />
             </Link>
           </li>
