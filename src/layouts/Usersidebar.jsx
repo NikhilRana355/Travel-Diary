@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Usernavbar } from "./usernavbar";
+import { Usernavbar } from "../layouts/Usernavbar";
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
@@ -18,7 +18,6 @@ export const Usersidebar = () => {
     navigate("/login");
   }
 
-  
   return (
     <>
       <div className="app-wrapper">

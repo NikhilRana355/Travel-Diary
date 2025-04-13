@@ -118,7 +118,7 @@ export const Usernavbar = ({ toggleSidebar }) => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/logout" className="nav-link text-danger" data-bs-toggle="tooltip" title="Logout">
+            <Link to="/login" className="nav-link text-danger" data-bs-toggle="tooltip" title="Logout">
               <i className="nav-icon bi bi-box-arrow-right" />
             </Link>
           </li>

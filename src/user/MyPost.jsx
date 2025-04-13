@@ -24,11 +24,11 @@ export const MyPost = () => {
     const fetchLocations = async (posts) => {
         let locationData = {};
         for (let post of posts) {
-            if (post.countryid && post.stateid && post.cityid) {
+            if (post.countryId && post.stateId && post.cityId) {
                 try {
-                    const countryRes = await axios.get(`/api/country/${post.countryid}`);
-                    const stateRes = await axios.get(`/api/state/${post.stateid}`);
-                    const cityRes = await axios.get(`/api/city/${post.cityid}`);
+                    const countryRes = await axios.get(`/api/country/${post.countryId}`);
+                    const stateRes = await axios.get(`/api/state/${post.stateId}`);
+                    const cityRes = await axios.get(`/api/city/${post.cityId}`);
 
                     locationData[post._id] = {
                         country: countryRes.data?.name || "Unknown Country",
@@ -102,12 +102,17 @@ export const MyPost = () => {
                             <div>
                                 <h3 className="text-center">{selectedPost.title}</h3>
                                 <p><strong>Description:</strong> {selectedPost.description}</p>
-                                <p><strong>Location:</strong> {locations[selectedPost._id]?.city}, {locations[selectedPost._id]?.state}, {locations[selectedPost._id]?.country}</p>
-                                <p><strong>Category:</strong> {selectedPost.category || "N/A"}</p>
-                                <p><strong>Weather:</strong> {selectedPost.weather || "N/A"}</p>
-                                <p><strong>Tags:</strong> {selectedPost.tags?.join(", ") || "N/A"}</p>
+                                <p><strong>Location:</strong>
+                                    {selectedPost.cityId?.name || "N/A"},
+                                    {selectedPost.stateId?.name || "N/A"},
+                                    {selectedPost.countryId?.name || "N/A"}
+                                </p>
+                                <p><strong>Start Date:</strong> {new Date(selectedPost.startDate).toLocaleDateString()}</p>
+                                <p><strong>End Date:</strong> {new Date(selectedPost.endDate).toLocaleDateString()}</p>
+                                <p><strong>Likes:</strong> {selectedPost.likes?.length || 0}</p>
                                 <p className="text-muted"><strong>Posted on:</strong> {new Date(selectedPost.createdAt).toLocaleDateString()}</p>
                             </div>
+
                         </div>
                     </div>
 
@@ -126,20 +131,18 @@ export const MyPost = () => {
 
             {/* Itinerary Modal */}
             {showItinerary && (
-  <div className="position-fixed top-0 start-0 w-100 h-100 bg-white" style={{ zIndex: 1060, overflowY: "auto" }}>
-    <button
-      className="btn-close position-absolute"
-      onClick={() => setShowItinerary(false)}
-      aria-label="Close"
-      style={{ top: "15px", right: "15px", zIndex: 1070 }}
-    ></button>
-    <div className="p-4">
-      <ItineraryPlanning />
-    </div>
-  </div>
-)}
-
-            
+                <div className="position-fixed top-0 start-0 w-100 h-100 bg-white" style={{ zIndex: 1060, overflowY: "auto" }}>
+                    <button
+                        className="btn-close position-absolute"
+                        onClick={() => setShowItinerary(false)}
+                        aria-label="Close"
+                        style={{ top: "15px", right: "15px", zIndex: 1070 }}
+                    ></button>
+                    <div className="p-4">
+                        <ItineraryPlanning />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
