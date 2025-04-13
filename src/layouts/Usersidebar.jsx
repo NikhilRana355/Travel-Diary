@@ -15,7 +15,7 @@ export const Usersidebar = () => {
 
   const handleLogout =() => {
     localStorage.clear();
-    Navigate("/login");
+    navigate("/login");
   }
 
   

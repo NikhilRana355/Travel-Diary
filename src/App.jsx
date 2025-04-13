@@ -22,6 +22,9 @@ import { ForgotPassword } from './common/ForgotPassword';
 import "./App.css"
 import { Message } from './user/Message';
 import { Notification } from './common/Notification';
+import { AdminNavbar } from './layouts/AdminNavbar';
+import { AdminSidebar } from './layouts/AdminSidebar';
+import { AdminHome } from './admin/AdminHome';
 
 axios.defaults.baseURL = "http://localhost:3022";
 
@@ -47,9 +50,9 @@ function App() {
         <Route path="/resetpassword/:token" element={<ResetPassword />}></Route>
         {/* <Route index element={<HomePage/>}></Route> */}
 
-        <Route element={<PrivateRoutes />}>
-          <Route path="/" element={<Usersidebar />} />
-          <Route path='/' element={<Navigate to='/user' />}></Route>
+        <Route element={<PrivateRoutes allowedRoles={["user","admin"]} />}>
+          {/* <Route path="/" element={<Usersidebar />} />
+          <Route path='/' element={<Navigate to='/user' />}></Route> */}
           <Route path="/post/:id" element={<PostDetails />}></Route>
           <Route path='/user' element={<Usersidebar />}>
 
@@ -67,6 +70,15 @@ function App() {
             <Route path='notification' element={<Notification />}></Route>
           </Route>
           {/* <Route path="profile" element={<Navigate to={`/user/profile/${userId}`} />} /> */}
+        </Route>
+
+        <Route element={<PrivateRoutes allowedRoles={["admin"]}/>}>
+           <Route path='/' element={<AdminSidebar/>}></Route>
+          {/* <Route path='/' element={<Navigate to='/admin'/>}></Route> */} 
+          <Route path='/admin' element={<AdminSidebar/>}>
+              <Route  path='adminhome' index element={<AdminHome/>}></Route>
+          </Route>
+
         </Route>
 
       </Routes>

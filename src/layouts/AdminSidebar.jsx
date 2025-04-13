@@ -1,128 +1,95 @@
-// import React, { useState } from "react";
-// import { UserNavbar } from "./UserNavbar";
-// import { Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import { AdminNavbar } from "./AdminNavbar";
 
-// export const UserSidebar = () => {
-//   const [isSidebarOpen, setSidebarOpen] = useState(true);
+export const AdminSidebar = () => {
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-//   const toggleSidebar = () => {
-//     console.log("toggleSidebar");
-//     setSidebarOpen(!isSidebarOpen);
-//   };
-//   return (
-//     <>
-//       <UserNavbar toggleSidebar={toggleSidebar} />
-//       <aside
-//           className={`app-sidebar bg-body-secondary shadow ${
-//             isSidebarOpen ? "open" : "d-none"
-//           }`}
-//           data-bs-theme="dark"
-//         >
-//         <div className="sidebar-brand">
-//           <a href="./index.html" className="brand-link">
-//             <img
-//               src="../../dist/assets/img/AdminLTELogo.png"
-//               // alt="AdminLTE Logo"
-//               className="brand-image opacity-75 shadow"
-//             />
+  const toggleSidebar = () => {
+    console.log("toggleSidebar");
+    setSidebarOpen(!isSidebarOpen);
+  };
 
-//             <span className="brand-text fw-light">AdminLTE 4</span>
-//           </a>
-//         </div>
+  const navigate = useNavigate();
 
-//         <div
-//           className=""
-//           data-overlayscrollbars-viewport="scrollbarHidden overflowXHidden overflowYScroll"
-//           tabIndex={-1}
-//           style={{
-//             marginRight: "-16px",
-//             marginBottom: "-16px",
-//             marginLeft: 0,
-//             top: "-8px",
-//             right: "auto",
-//             left: "-8px",
-//             width: "calc(100% + 16px)",
-//             padding: 8,
-//           }}
-//         >
-//           <nav className="mt-2">
-//             <ul
-//               className="nav sidebar-menu flex-column"
-//               data-lte-toggle="treeview"
-//               role="menu"
-//               data-accordion="false"
-//             >
-//               <li className="nav-item menu-open">
-//                 <a href="#" className="nav-link active">
-//                   <i className="nav-icon bi bi-speedometer" />
-//                   <p>
-//                     Dashboard
-//                     <i className="nav-arrow bi bi-chevron-right" />
-//                   </p>
-//                 </a>
-//                 <ul className="nav nav-treeview">
-//                   <li className="nav-item">
-//                     <a href="./index.html" className="nav-link active">
-//                       <i className="nav-icon bi bi-circle" />
-//                       <p>Dashboard v1</p>
-//                     </a>
-//                   </li>
-//                   <li className="nav-item">
-//                     <a href="./index2.html" className="nav-link">
-//                       <i className="nav-icon bi bi-circle" />
-//                       <p>Dashboard v2</p>
-//                     </a>
-//                   </li>
-//                   <li className="nav-item">
-//                     <a href="./index3.html" className="nav-link">
-//                       <i className="nav-icon bi bi-circle" />
-//                       <p>Dashboard v3</p>
-//                     </a>
-//                   </li>
-//                 </ul>
-//               </li>
-//               <li className="nav-item">
-//                 <a href="./generate/theme.html" className="nav-link">
-//                   <i className="nav-icon bi bi-palette" />
-//                   <p>Theme Generate</p>
-//                 </a>
-//               </li>
-//               <li className="nav-item">
-//                 <a href="#" className="nav-link">
-//                   <i className="nav-icon bi bi-box-seam-fill" />
-//                   <p>
-//                     Widgets
-//                     <i className="nav-arrow bi bi-chevron-right" />
-//                   </p>
-//                 </a>
-//                 <ul className="nav nav-treeview">
-//                   <li className="nav-item">
-//                     <a href="./widgets/small-box.html" className="nav-link">
-//                       <i className="nav-icon bi bi-circle" />
-//                       <p>Small Box</p>
-//                     </a>
-//                   </li>
-//                   <li className="nav-item">
-//                     <a href="./widgets/info-box.html" className="nav-link">
-//                       <i className="nav-icon bi bi-circle" />
-//                       <p>info Box</p>
-//                     </a>
-//                   </li>
-//                   <li className="nav-item">
-//                     <a href="./widgets/cards.html" className="nav-link">
-//                       <i className="nav-icon bi bi-circle" />
-//                       <p>Cards</p>
-//                     </a>
-//                   </li>
-//                 </ul>
-//               </li>
-//             </ul>
-//           </nav>
-//         </div>
-//       </aside>
-//       <main class="app-main">
-//         <Outlet></Outlet>
-//       </main>
-//     </>
-//   );
-// };
+  const handleLogout =() => {
+    localStorage.clear();
+    navigate("/login");
+  }
+
+  return (
+    <>
+      <div className="app-wrapper">
+        <AdminNavbar toggleSidebar={toggleSidebar} />
+        <aside
+          className={`app-sidebar bg-body-secondary shadow ${isSidebarOpen ? "open" : "d-none"
+            }`}
+          data-bs-theme="light"
+        >
+          <div className="sidebar-brand">
+            <Link to="/user/home" className="brand-link">
+              <div className="brand-text  text-uppercase">Travel Diary</div>
+            </Link>
+          </div>
+
+          <div className="sidebar-menu-container">
+            <nav className="mt-2">
+              <ul className="nav sidebar-menu flex-column" role="menu">
+                <li className="nav-item">
+                  <Link to="/user" className="nav-link">
+                    <i className="nav-icon bi bi-house-door" />
+                    <p>Home</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/user/addDiary" className="nav-link">
+                    <i class=" nav-icon bi bi-plus-circle"></i>
+                    <p>Add Diary</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/user/itinerary" className="nav-link">
+                    <i className="nav-icon bi bi-check-square" />
+                    <p>Itinerary</p>
+                  </Link>
+                </li>
+                {/* <li className="nav-item">
+                  <Link to="/user/posts" className="nav-link">
+                    <i className="nav-icon bi bi-table"></i>
+                    <p>
+                      Post
+                    </p>
+                  </Link>
+                </li> */}
+                <li className="nav-item">
+                  <Link to="/user/message" className="nav-link">
+                    <i className="nav-icon bi bi-chat-dots" />
+                    <p>
+                      Messages
+                    </p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/user/profile" className="nav-link">
+                    <i className="nav-icon bi bi-person-circle" />
+                    <p>Profile</p>
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/login" className="nav-link text-danger" onClick={handleLogout}>
+                    <i className="nav-icon bi bi-box-arrow-right" />
+                    <p>Logout</p>
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </aside>
+        <main class="app-main">
+          <Outlet></Outlet>
+        </main>
+      </div>
+    </>
+  );
+};
