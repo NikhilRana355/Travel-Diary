@@ -49,9 +49,9 @@ export const AdminSidebar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/user/itinerary" className="nav-link">
+                  <Link to="/admin/admindiary" className="nav-link">
                     <i className="nav-icon bi bi-check-square" />
-                    <p>Itinerary</p>
+                    <p>All Diary</p>
                   </Link>
                 </li>
                 {/* <li className="nav-item">
@@ -62,16 +62,16 @@ export const AdminSidebar = () => {
                     </p>
                   </Link>
                 </li> */}
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link to="/user/message" className="nav-link">
                     <i className="nav-icon bi bi-chat-dots" />
                     <p>
                       Messages
                     </p>
                   </Link>
-                </li>
+                </li> */}
                 <li className="nav-item">
-                  <Link to="/user/profile" className="nav-link">
+                  <Link to="/admin/adminprofile" className="nav-link">
                     <i className="nav-icon bi bi-person-circle" />
                     <p>Profile</p>
                   </Link>

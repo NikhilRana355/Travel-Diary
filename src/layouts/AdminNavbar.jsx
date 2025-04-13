@@ -77,11 +77,11 @@ export const AdminNavbar = ({ toggleSidebar }) => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="" className="nav-link" data-bs-toggle="tooltip" title="Itinerary">
+            <Link to="/admin/admindiary" className="nav-link" data-bs-toggle="tooltip" title="All Diary">
               <i className="nav-icon bi bi-check-square" />
             </Link>
           </li>
-          <li className="nav-item position-relative">
+          {/* <li className="nav-item position-relative">
             <Link to="" className="nav-link" data-bs-toggle="tooltip" title="Notification">
               <i className="nav-icon bi bi-bell-fill" />
               {unreadNotifications > 0 && (
@@ -100,7 +100,7 @@ export const AdminNavbar = ({ toggleSidebar }) => {
                 </span>
               )}
             </Link>
-          </li>
+          </li> */}
           {/* <li className="nav-item">
             <Link to="/user/posts" className="nav-link" data-bs-toggle="tooltip" title="Post">
               <i className="nav-icon bi bi-table"></i>
@@ -112,7 +112,7 @@ export const AdminNavbar = ({ toggleSidebar }) => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="" className="nav-link" data-bs-toggle="tooltip" title="Profile">
+            <Link to="/admin/adminprofile" className="nav-link" data-bs-toggle="tooltip" title="Profile">
               <i className="nav-icon bi bi-person-circle" />
             </Link>
           </li>

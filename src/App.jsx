@@ -26,6 +26,8 @@ import { AdminNavbar } from './layouts/AdminNavbar';
 import { AdminSidebar } from './layouts/AdminSidebar';
 import { AdminHome } from './admin/AdminHome';
 import { AdminUserList } from './admin/AdminUserList';
+import { AdminAllDiary } from './admin/AdminAllDiary';
+import { AdminProfile } from './admin/AdminProfile';
 
 axios.defaults.baseURL = "http://localhost:3022";
 
@@ -79,6 +81,8 @@ function App() {
           <Route path='/admin' element={<AdminSidebar/>}>
               <Route  path='adminhome' index element={<AdminHome/>}></Route>
               <Route path='adminuser' element={<AdminUserList/>}></Route>
+              <Route path='admindiary' element={<AdminAllDiary/>}></Route>
+              <Route path='adminprofile' element={<AdminProfile/>}></Route>
           </Route>
 
         </Route>
