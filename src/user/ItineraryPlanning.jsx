@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-
+import React, { useState } from 'react';
+import Swal from 'sweetalert2'; // ✅ Import SweetAlert
 
 export const ItineraryPlanning = () => {
   const [formData, setFormData] = useState({
@@ -18,82 +18,89 @@ export const ItineraryPlanning = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submitted Data:", formData);
+
+    // ✅ SweetAlert confirmation
+    Swal.fire({
+      title: 'Itinerary Saved!',
+      text: `Your trip to ${formData.destination} has been planned.`,
+      icon: 'success',
+      confirmButtonText: 'Awesome!',
+    });
   };
 
   return (
     <div className="container-fluid min-vh-100 d-flex align-items-center bg-light">
-    <div className="container p-5">
-      <h2 className="text-center mb-4">Plan Your Itinerary</h2>
-      <form onSubmit={handleSubmit} >
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <label className="form-label">Trip Name</label>
-            <input
-              type="text"
-              className="form-control"
-              name="tripName"
-              value={formData.tripName}
-              onChange={handleChange}
-              required
-            />
+      <div className="container p-5">
+        <h2 className="text-center mb-4">Plan Your Itinerary</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label className="form-label">Trip Name</label>
+              <input
+                type="text"
+                className="form-control"
+                name="tripName"
+                value={formData.tripName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label">Destination</label>
+              <input
+                type="text"
+                className="form-control"
+                name="destination"
+                value={formData.destination}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
-          <div className="col-md-6">
-            <label className="form-label">Destination</label>
-            <input
-              type="text"
-              className="form-control"
-              name="destination"
-              value={formData.destination}
-              onChange={handleChange}
-              required
-            />
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <label className="form-label">Start Date</label>
+              <input
+                type="date"
+                className="form-control"
+                name="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label">End Date</label>
+              <input
+                type="date"
+                className="form-control"
+                name="endDate"
+                value={formData.endDate}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="row mb-3">
-          <div className="col-md-6">
-            <label className="form-label">Start Date</label>
-            <input
-              type="date"
+          <div className="mb-3">
+            <label className="form-label">Notes</label>
+            <textarea
               className="form-control"
-              name="startDate"
-              value={formData.startDate}
+              name="notes"
+              value={formData.notes}
               onChange={handleChange}
-              required
-            />
+              rows="4"
+            ></textarea>
           </div>
 
-          <div className="col-md-6">
-            <label className="form-label">End Date</label>
-            <input
-              type="date"
-              className="form-control"
-              name="endDate"
-              value={formData.endDate}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Notes</label>
-          <textarea
-            className="form-control"
-            name="notes"
-            value={formData.notes}
-            onChange={handleChange}
-            rows="4"
-          ></textarea>
-        </div>
-
-        <button type="submit" className="btn btn-primary w-100 py-2">
-          Save Itinerary
-        </button>
-      </form>
+          <button type="submit" className="btn btn-primary w-100 py-2">
+            Save Itinerary
+          </button>
+        </form>
+      </div>
     </div>
-  </div>
-  )
-}
-
+  );
+};
