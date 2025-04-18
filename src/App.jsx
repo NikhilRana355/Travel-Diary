@@ -78,8 +78,8 @@ function App() {
         <Route element={<PrivateRoutes allowedRoles={["admin"]}/>}>
            <Route path='/' element={<AdminSidebar/>}></Route>
           {/* <Route path='/' element={<Navigate to='/admin'/>}></Route> */} 
-          <Route path='/admin' element={<AdminSidebar/>}>
-              <Route  path='adminhome' index element={<AdminHome/>}></Route>
+          <Route path='/' element={<AdminSidebar/>}>
+              <Route  path='/' index element={<AdminHome/>}></Route>
               <Route path='adminuser' element={<AdminUserList/>}></Route>
               <Route path='admindiary' element={<AdminAllDiary/>}></Route>
               <Route path='adminprofile' element={<AdminProfile/>}></Route>

@@ -43,7 +43,7 @@ export const Login = () => {
         if (role === "User") {
           navigate("/user");
         } else if (role === "Admin") {
-          navigate("/admin");
+          navigate("/");
         } else {
           console.warn("Unknown role:", role);
         }

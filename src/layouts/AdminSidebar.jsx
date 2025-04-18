@@ -37,19 +37,19 @@ export const AdminSidebar = () => {
             <nav className="mt-2">
               <ul className="nav sidebar-menu flex-column" role="menu">
                 <li className="nav-item">
-                  <Link to="/admin/adminhome" className="nav-link">
+                  <Link to="/" className="nav-link">
                     <i className="nav-icon bi bi-house-door" />
                     <p>Home</p>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/admin/adminuser" className="nav-link">
+                  <Link to="/adminuser" className="nav-link">
                     <i class=" nav-icon bi bi-people-fill"></i>
                     <p>Users</p>
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/admin/admindiary" className="nav-link">
+                  <Link to="/admindiary" className="nav-link">
                     <i className="nav-icon bi bi-check-square" />
                     <p>All Diary</p>
                   </Link>
@@ -71,7 +71,7 @@ export const AdminSidebar = () => {
                   </Link>
                 </li> */}
                 <li className="nav-item">
-                  <Link to="/admin/adminprofile" className="nav-link">
+                  <Link to="/adminprofile" className="nav-link">
                     <i className="nav-icon bi bi-person-circle" />
                     <p>Profile</p>
                   </Link>

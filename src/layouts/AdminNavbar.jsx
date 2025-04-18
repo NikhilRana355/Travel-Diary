@@ -54,7 +54,6 @@ export const AdminNavbar = ({ toggleSidebar }) => {
     return () => window.removeEventListener("storage", handleStorage);
   }, [currentUserId]);
 
-
   return (
     <nav className="app-header navbar navbar-expand bg-body">
       <div className="container-fluid">
@@ -67,17 +66,17 @@ export const AdminNavbar = ({ toggleSidebar }) => {
         </ul>
         <ul className="navbar-nav">
           <li className="nav-item">
-            <Link to="/admin/adminhome" className="nav-link" data-bs-toggle="tooltip" title="Home">
+            <Link to="/" className="nav-link" data-bs-toggle="tooltip" title="Home">
               <i className="nav-icon bi bi-house-door-fill" />
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/admin/adminuser" className="nav-link" data-bs-toggle="tooltip" title="Users">
+            <Link to="/adminuser" className="nav-link" data-bs-toggle="tooltip" title="Users">
               <i className="nav-icon bi bi-people-fill"></i>
             </Link>
           </li>
           <li className="nav-item">
-            <Link to="/admin/admindiary" className="nav-link" data-bs-toggle="tooltip" title="All Diary">
+            <Link to="/admindiary" className="nav-link" data-bs-toggle="tooltip" title="All Diary">
               <i className="nav-icon bi bi-check-square" />
             </Link>
           </li>
@@ -106,13 +105,13 @@ export const AdminNavbar = ({ toggleSidebar }) => {
               <i className="nav-icon bi bi-table"></i>
             </Link>
           </li> */}
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <Link to="/user/search" className="nav-link" data-bs-toggle="tooltip" title="Search">
               <i className="nav-icon bi bi-search" />
             </Link>
-          </li>
+          </li> */}
           <li className="nav-item">
-            <Link to="/admin/adminprofile" className="nav-link" data-bs-toggle="tooltip" title="Profile">
+            <Link to="/adminprofile" className="nav-link" data-bs-toggle="tooltip" title="Profile">
               <i className="nav-icon bi bi-person-circle" />
             </Link>
           </li>

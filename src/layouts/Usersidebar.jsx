@@ -77,7 +77,7 @@ export const Usersidebar = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/logout" className="nav-link text-danger" onClick={handleLogout}>
+                  <Link to="/login" className="nav-link text-danger" onClick={handleLogout}>
                     <i className="nav-icon bi bi-box-arrow-right" />
                     <p>Logout</p>
                   </Link>

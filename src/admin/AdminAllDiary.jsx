@@ -30,7 +30,7 @@ export const AdminAllDiary = () => {
         console.error("Failed to delete post", err);
         alert("Error deleting diary. Please try again.");
       }
-    };
+    };    
   
     return (
       <div className="container mt-4">

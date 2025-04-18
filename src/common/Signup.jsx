@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -10,6 +10,9 @@ import GradientText from "../common/GradientText";
 export const Signup = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   const submitHandler = async (data) => {
     try {
@@ -50,7 +53,7 @@ export const Signup = () => {
   };
 
   return (
-    
+
     <div className="signup-container">
       <div className="signup-box">
         <GradientText text="Travel Diary" />
@@ -67,8 +70,44 @@ export const Signup = () => {
           <input type="email" placeholder="Email" {...register("email", { required: "Email is required" })} />
           {errors.email && <span className="error">{errors.email.message}</span>}
 
-          <input type="password" placeholder="Password" {...register("password", { required: "Password is required" })} />
-          {errors.password && <span className="error">{errors.password.message}</span>}
+          {/* <input type="password" placeholder="Password" {...register("password", { required: "Password is required" })} />
+          {errors.password && <span className="error">{errors.password.message}</span>} */}
+
+          <div style={{ position: "relative" }}>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 8,
+                  message: "Password must be at least 8 characters",
+                },
+                maxLength: {
+                  value: 12,
+                  message: "Password must not exceed 12 characters",
+                },
+                pattern: {
+                  value: /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,12}$/,
+                  message:
+                    "Password must include at least one uppercase letter, one number, and one special character",
+                },
+              })}
+            />
+            <i
+              className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}
+              onClick={togglePasswordVisibility}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                fontSize: "18px",
+                color: "#555",
+              }}
+            ></i>
+          </div>
 
           <button type="submit">Sign up</button>
         </form>
@@ -78,7 +117,7 @@ export const Signup = () => {
         </div>
       </div>
     </div>
-   
+
   );
 };
 
